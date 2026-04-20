@@ -1,0 +1,21 @@
+# Build output
+build/
+dist/
+.build/
+*.dmg
+
+# macOS
+.DS_Store
+*.swp
+
+# Xcode / SwiftPM
+*.xcodeproj
+Package.resolved
+.swiftpm/
+
+# AutoHotkey compiled binaries (built on Windows, published via Releases)
+windows/*.exe
+
+# Stray swiftc output at repo root
+/LayoutFixer
+
