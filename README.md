@@ -23,19 +23,28 @@ Both start automatically on login.
    ad-hoc signed, not notarized).
 4. Grant **Accessibility** permission when prompted:
    *System Settings → Privacy & Security → Accessibility → enable Layout Fixer.*
-5. The app lives in the menu bar as `⌨`. Press `⌘S` to convert the selection.
+5. The app lives in the menu bar as a small **keyboard** icon (SF Symbol,
+   auto-adapts to light/dark mode). Press `⌘S` to convert the selection.
 
 "Launch at Login" is enabled on first run and can be toggled from the menu.
 
 ### Build from source (macOS)
 
 ```bash
-git clone https://github.com/tamerlan/layout-fixer.git
+git clone https://github.com/RadioTamerlan/layout-fixer.git
 cd layout-fixer
 bash scripts/build-dmg.sh      # → dist/LayoutFixer-1.0.dmg
 ```
 
-Requires Xcode Command Line Tools (`xcode-select --install`).
+Requires:
+
+- Xcode Command Line Tools (`xcode-select --install`).
+- `librsvg` if you want the Finder/Spotlight app icon embedded
+  (`brew install librsvg`). If missing, the build still succeeds but the app
+  uses the generic macOS app icon.
+
+The build script (`scripts/build-dmg.sh`) renders `assets/AppIcon.svg` into a
+multi-resolution `.icns` at build time and bundles it via `CFBundleIconFile`.
 
 ---
 
@@ -69,6 +78,31 @@ will execute it and add itself to Startup on first run.
   English (→ RU→EN).
 - On macOS, pressing the hotkey with **nothing selected** undoes the most
   recent conversion.
+
+## Punctuation coverage
+
+The converter handles every printable key on the keyboard, not just letters.
+The shift-row punctuation differs between US QWERTY and the **macOS "Russian"**
+layout (the default Apple ships):
+
+| US Shift | macOS Russian Shift |
+|----------|---------------------|
+| `@`      | `"`                 |
+| `#`      | `№`                 |
+| `$`      | `%`                 |
+| `%`      | `:`                 |
+| `^`      | `,`                 |
+| `&`      | `.`                 |
+| `*`      | `;`                 |
+
+So `Ghbdtn^ rfr ltkf?` converts to `Привет, как дела?` (the `^` typed on US
+QWERTY corresponds to `,` on macOS Russian's Shift+6).
+
+**Caveat — "Russian – PC" layout users:** macOS also ships a *Russian – PC*
+layout that mirrors Windows. Its shift row is different (`Shift+6` = `:` there,
+not `,`). The current mappings target the default macOS Russian layout. If you
+use Russian – PC, the letter keys still convert correctly but the shift-row
+punctuation will be off.
 
 ## License
 
