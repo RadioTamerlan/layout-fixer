@@ -7,7 +7,9 @@ final class StatusBarController: NSObject, NSMenuDelegate {
     override init() {
         super.init()
         if let button = statusItem.button {
-            button.title = "⌨"
+            let image = NSImage(systemSymbolName: "keyboard", accessibilityDescription: "Layout Fixer")
+            image?.isTemplate = true
+            button.image = image
             button.toolTip = "Layout Fixer — ⌘S to convert selection"
         }
         buildMenu()

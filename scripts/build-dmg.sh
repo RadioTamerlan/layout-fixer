@@ -13,6 +13,31 @@ DMG="$DIST/LayoutFixer-$VERSION.dmg"
 rm -rf "$BUILD" "$DMG"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources" "$DIST"
 
+# --- App icon -----------------------------------------------------------------
+# Render assets/AppIcon.svg into an Apple .icns at every required size.
+# rsvg-convert is required: `brew install librsvg` if missing.
+if [[ -f "$ROOT/assets/AppIcon.svg" ]]; then
+    if ! command -v rsvg-convert >/dev/null 2>&1; then
+        echo "==> Skipping app icon: install librsvg with 'brew install librsvg' to embed one."
+    else
+        echo "==> Generating app icon (.icns)..."
+        ICONSET="$BUILD/AppIcon.iconset"
+        mkdir -p "$ICONSET"
+        # Apple iconset requires these exact filenames + sizes
+        for entry in \
+            "16:icon_16x16.png" "32:icon_16x16@2x.png" \
+            "32:icon_32x32.png" "64:icon_32x32@2x.png" \
+            "128:icon_128x128.png" "256:icon_128x128@2x.png" \
+            "256:icon_256x256.png" "512:icon_256x256@2x.png" \
+            "512:icon_512x512.png" "1024:icon_512x512@2x.png"; do
+            size="${entry%%:*}"
+            name="${entry##*:}"
+            rsvg-convert -w "$size" -h "$size" "$ROOT/assets/AppIcon.svg" -o "$ICONSET/$name"
+        done
+        iconutil -c icns "$ICONSET" -o "$APP/Contents/Resources/AppIcon.icns"
+    fi
+fi
+
 # --- Info.plist ---------------------------------------------------------------
 cat > "$APP/Contents/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
@@ -25,6 +50,7 @@ cat > "$APP/Contents/Info.plist" <<PLIST
     <key>CFBundleVersion</key><string>$VERSION</string>
     <key>CFBundleShortVersionString</key><string>$VERSION</string>
     <key>CFBundleExecutable</key><string>LayoutFixer</string>
+    <key>CFBundleIconFile</key><string>AppIcon.icns</string>
     <key>CFBundlePackageType</key><string>APPL</string>
     <key>LSMinimumSystemVersion</key><string>13.0</string>
     <key>NSPrincipalClass</key><string>NSApplication</string>
