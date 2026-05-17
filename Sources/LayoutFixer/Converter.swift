@@ -2,21 +2,32 @@ import Foundation
 
 enum Converter {
 
-    // QWERTY → ЙЦУКЕН
+    // QWERTY → ЙЦУКЕН (macOS "Russian" layout — the default Apple ships, not "Russian – PC")
     static let enToRu: [Character: Character] = [
+        // Top letter row
         "q": "й", "w": "ц", "e": "у", "r": "к", "t": "е", "y": "н", "u": "г",
         "i": "ш", "o": "щ", "p": "з", "[": "х", "]": "ъ",
+        // Home letter row
         "a": "ф", "s": "ы", "d": "в", "f": "а", "g": "п", "h": "р", "j": "о",
         "k": "л", "l": "д", ";": "ж", "'": "э",
+        // Bottom letter row
         "z": "я", "x": "ч", "c": "с", "v": "м", "b": "и", "n": "т", "m": "ь",
         ",": "б", ".": "ю",
 
+        // Top letter row (Shift)
         "Q": "Й", "W": "Ц", "E": "У", "R": "К", "T": "Е", "Y": "Н", "U": "Г",
         "I": "Ш", "O": "Щ", "P": "З", "{": "Х", "}": "Ъ",
+        // Home letter row (Shift)
         "A": "Ф", "S": "Ы", "D": "В", "F": "А", "G": "П", "H": "Р", "J": "О",
         "K": "Л", "L": "Д", ":": "Ж", "\"": "Э",
+        // Bottom letter row (Shift)
         "Z": "Я", "X": "Ч", "C": "С", "V": "М", "B": "И", "N": "Т", "M": "Ь",
-        "<": "Б", ">": "Ю"
+        "<": "Б", ">": "Ю",
+
+        // Number-row punctuation that differs between US Shift and macOS Russian Shift.
+        // US:    ! @ # $ % ^ & * ( ) _ +
+        // RU-mac:! " № % : , . ; ( ) _ +
+        "@": "\"", "#": "№", "$": "%", "%": ":", "^": ",", "&": ".", "*": ";"
     ]
 
     // ЙЦУКЕН → QWERTY (auto-generated reverse)
